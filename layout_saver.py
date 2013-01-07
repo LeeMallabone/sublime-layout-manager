@@ -9,19 +9,19 @@ class SublimeLayoutManager:
     def save(self):
         self.to_restore = self.save_views()
         self.focus = self.save_active_focus()
-        sublime.status_message("Saved layout of " + str(len(self.to_restore)) + " file(s)")
+        sublime.status_message("Saved layout of %i file(s)" % len(self.to_restore))
 
     # Attempt to restore the active window's groups to show the views they contained
     # when the user last activated the save_layout command.
     def restore(self):
         self.restore_views(self.to_restore)
         self.restore_active_focus(self.focus)
-        sublime.status_message("Restored layout of " + str(len(self.to_restore)) + " file(s).")
+        sublime.status_message("Restored layout of %i file(s)." % len(self.to_restore))
 
     # When a view closes, store its filename so we can still restore something
     def closed(self, closed_view):
         for i, view in enumerate(self.to_restore):
-            print "Checking " + str(view.id()) + " against closing view " + str(closed_view.id())
+            print "Checking %i against closing view %i" % (view.id(), closed_view.id())
             if view.id() == closed_view.id():
                 self.to_restore[i] = closed_view.file_name()
 
@@ -31,14 +31,14 @@ class SublimeLayoutManager:
         views = []
         for i in range(panes):
             view = sublime.active_window().active_view_in_group(i)
-            print "Noticed that group " + str(i) + " has view " + (view.file_name() if view is not None and view.file_name() else str(view))
+            print "Noticed that group %i has view %s" % (i, (view.file_name() if view is not None and view.file_name() else view))
             views.append(view)
         return views
 
     def restore_views(self, views):
         window = sublime.active_window()
         for group_pos in range(len(views)):
-            print "Will attempt to restore group " + str(group_pos) + " with " + str(views[group_pos])
+            print "Will attempt to restore group %i with %s" % (group_pos, views[group_pos])
             if group_pos < window.num_groups() and views[group_pos] is not None:
                 if isinstance(views[group_pos], unicode):
                     window.focus_group(group_pos)
@@ -54,18 +54,18 @@ class SublimeLayoutManager:
         active['selection'] = []
         for region in window.active_view().sel():
             active['selection'].append(region)
-        print "Saved active state: " + str(active)
+        print "Saved active state: %s" % active
         return active
 
     def restore_active_focus(self, active):
         window = sublime.active_window()
         view = None
-        if (active['group'] is not None):
+        if active['group'] is not None:
             window.focus_group(active['group'])
             view = window.active_view_in_group(active['group'])
             window.focus_view(view)
-        if (active['selection'] is not None and view is not None):
-            print "restoring selection: " + str(active['selection'])
+        if active['selection'] is not None and view is not None:
+            print "restoring selection: %s" % active['selection']
             window.active_view().sel().clear()
             for region in active['selection']:
                 window.active_view().sel().add(region)
