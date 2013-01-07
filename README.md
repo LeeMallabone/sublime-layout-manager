@@ -21,5 +21,5 @@ Press `cmd-ctrl-,` to restore the state of your window.
 License
 -------
 
-Copyright 2012 Lee Mallabone.
+Copyright 2013 Lee Mallabone, MIT license. See LICENSE.MIT for more details.
 
