@@ -1,0 +1,4 @@
+[
+    { "keys": ["super+ctrl+."],  "command": "save_layout"},
+    { "keys": ["super+ctrl+,"],  "command": "restore_layout"}
+]
